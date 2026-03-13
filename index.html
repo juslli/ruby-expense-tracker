@@ -61,7 +61,20 @@
       </div>
 
       <div class="card history-card">
-        <h3>Histórico</h3>
+        <div class="history-header">
+          <h3>Histórico</h3>
+
+          <div class="history-actions">
+            <select id="filter">
+              <option value="all">Todas</option>
+              <option value="income">Entradas</option>
+              <option value="expense">Saídas</option>
+            </select>
+
+            <button id="clear-all" class="clear-btn">Limpar tudo</button>
+          </div>
+        </div>
+
         <ul id="list" class="list"></ul>
       </div>
     </section>
