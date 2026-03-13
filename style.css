@@ -316,3 +316,55 @@ body {
     font-size: 1.3rem;
   }
 }
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.history-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.history-actions select {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  outline: none;
+  cursor: pointer;
+}
+
+.history-actions select option {
+  background: #11111a;
+  color: white;
+}
+
+.clear-btn {
+  border: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: white;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  transition: 0.25s ease;
+}
+
+.clear-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(239, 68, 68, 0.28);
+}
+
+.transaction-date {
+  font-size: 0.8rem;
+  color: var(--soft);
+}
