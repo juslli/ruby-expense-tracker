@@ -5,6 +5,8 @@ const list = document.getElementById("list");
 const form = document.getElementById("form");
 const text = document.getElementById("text");
 const amount = document.getElementById("amount");
+const filter = document.getElementById("filter");
+const clearAllBtn = document.getElementById("clear-all");
 
 const localStorageTransactions = JSON.parse(localStorage.getItem("transactions"));
 
@@ -19,8 +21,27 @@ function formatCurrency(value) {
   });
 }
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("pt-BR");
+}
+
 function generateID() {
   return Math.floor(Math.random() * 1000000000);
+}
+
+function getFilteredTransactions() {
+  const selectedFilter = filter.value;
+
+  if (selectedFilter === "income") {
+    return transactions.filter(transaction => transaction.amount > 0);
+  }
+
+  if (selectedFilter === "expense") {
+    return transactions.filter(transaction => transaction.amount < 0);
+  }
+
+  return transactions;
 }
 
 function addTransactionDOM(transaction) {
@@ -33,6 +54,7 @@ function addTransactionDOM(transaction) {
   item.innerHTML = `
     <div class="transaction-info">
       <span class="transaction-name">${transaction.text}</span>
+      <span class="transaction-date">${formatDate(transaction.createdAt)}</span>
       <span class="transaction-value">${operator} ${formatCurrency(Math.abs(transaction.amount))}</span>
     </div>
     <button class="delete-btn" onclick="removeTransaction(${transaction.id})">✕</button>
@@ -64,10 +86,15 @@ function updateLocalStorage() {
 function init() {
   list.innerHTML = "";
 
-  if (transactions.length === 0) {
-    list.innerHTML = `<div class="empty-message">Nenhuma transação adicionada ainda.</div>`;
+  const filteredTransactions = getFilteredTransactions();
+
+  if (filteredTransactions.length === 0) {
+    list.innerHTML = `<div class="empty-message">Nenhuma transação encontrada.</div>`;
   } else {
-    transactions.forEach(addTransactionDOM);
+    filteredTransactions
+      .slice()
+      .reverse()
+      .forEach(addTransactionDOM);
   }
 
   updateValues();
@@ -84,7 +111,8 @@ function addTransaction(e) {
   const transaction = {
     id: generateID(),
     text: text.value.trim(),
-    amount: +amount.value
+    amount: +amount.value,
+    createdAt: new Date().toISOString()
   };
 
   transactions.push(transaction);
@@ -103,6 +131,25 @@ function removeTransaction(id) {
   init();
 }
 
+function clearAllTransactions() {
+  if (transactions.length === 0) {
+    alert("Não há transações para remover.");
+    return;
+  }
+
+  const confirmDelete = confirm("Tem certeza que deseja apagar todas as transações?");
+
+  if (!confirmDelete) {
+    return;
+  }
+
+  transactions = [];
+  updateLocalStorage();
+  init();
+}
+
 form.addEventListener("submit", addTransaction);
+filter.addEventListener("change", init);
+clearAllBtn.addEventListener("click", clearAllTransactions);
 
 init();
